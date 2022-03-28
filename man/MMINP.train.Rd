@@ -81,8 +81,10 @@ well-fitted.
 \examples{
 data(train_metab)
 data(train_metag)
-mminp_model <- MMINP.train(metag = train_metag$preprocessed,
-                           metab = train_metab$preprocessed,
+train_metag_preprocessed <- MMINP.preprocess(train_metag, normalized = FALSE)
+train_metab_preprocessed <- MMINP.preprocess(train_metab, normalized = FALSE)
+mminp_model <- MMINP.train(metag = train_metag_preprocessed,
+                           metab = train_metab_preprocessed,
                            n = 3:8, nx = 0:5, ny = 0:5, nr_cores = 1)
 length(mminp_model$trainres$wellPredicted)
 }

@@ -5,9 +5,8 @@
 \alias{train_metab}
 \title{(Data) Normalized metabolite abundances for MMINP training}
 \format{
-A list containing two tables of metabolite abundances (proportion
-and preprocessed values), with 155 subjects in rows and 135 KEGG compound
-IDs in columns.
+A data frame of metabolite relative abundances (i.e. proportion),
+with 155 subjects in rows and 135 KEGG compound IDs in columns.
 }
 \description{
 This datasets were built from PRISM dataset (Franzosa et al., 2019) by

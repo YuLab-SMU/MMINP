@@ -21,7 +21,9 @@ Imports:
     OmicsPLS (>= 2.0.2),
     stats
 Suggests: 
-    testthat (>= 3.0.0)   
+    rmarkdown,
+    knitr,
+    testthat (>= 3.0.0)
 License: GPL (>= 3.0)
 URL: https://github.com/YuLab-SMU/MMINP
 BugReports: https://github.com/YuLab-SMU/MMINP/issues
@@ -30,3 +32,4 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Config/testthat/edition: 3
+VignetteBuilder: knitr

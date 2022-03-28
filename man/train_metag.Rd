@@ -5,9 +5,8 @@
 \alias{train_metag}
 \title{(Data) Normalized gene family abundances for MMINP training}
 \format{
-A list containing two tables of gene family abundances (proportion
-and preprocessed values), with 155 subjects in rows and 733
-KEGG Orthology (KO) IDs in columns.
+A data frame of gene family relative abundances (i.e. proportion),
+with 155 subjects in rows and 733 KEGG Orthology (KO) IDs in columns.
 }
 \description{
 This datasets were built from PRISM dataset (Franzosa et al., 2019) by

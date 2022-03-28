@@ -1,6 +1,6 @@
 test_that("MMINP.preprocess works", {
   data(train_metag)
-  metag_preprocessed <- MMINP.preprocess(train_metag$proportion,
+  metag_preprocessed <- MMINP.preprocess(train_metag,
                                          normalized = FALSE)
   testthat::expect_equal(all(colMeans(metag_preprocessed)<1e-5), TRUE)
 

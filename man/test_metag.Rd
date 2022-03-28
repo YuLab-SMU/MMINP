@@ -5,9 +5,8 @@
 \alias{test_metag}
 \title{(Data) Normalized gene family abundances for MMINP prediction}
 \format{
-A list containing two tables of gene family abundances (proportion
-and preprocessed values), with 65 subjects in rows and 629 KEGG
-Orthology (KO) IDs in columns.
+A data frame of gene family relative abundances (i.e. proportion),
+with 65 subjects in rows and 629 KEGG Orthology (KO) IDs in columns.
 }
 \description{
 This datasets were built from NLIBD dataset (Franzosa et al., 2019) by

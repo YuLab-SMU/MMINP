@@ -24,8 +24,8 @@ Filter features of input table according to prevalence and/or abundance.
 }
 \examples{
 data(train_metag)
-d <- filterFeatures(train_metag$proportion, prev = 0.8)
-dim(train_metag$proportion)
+d <- filterFeatures(train_metag, prev = 0.8)
+dim(train_metag)
 dim(d)
 
 }

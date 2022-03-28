@@ -5,9 +5,8 @@
 \alias{test_metab}
 \title{(Data) Normalized metabolite abundances for MMINP prediction}
 \format{
-A list containing two tables of metabolite abundances (proportion
-and preprocessed values), with 65 subjects in rows and 130 KEGG compound
-IDs in columns.
+A data frame of metabolite relative abundances (i.e. proportion),
+with 65 subjects in rows and 130 KEGG compound IDs in columns.
 }
 \description{
 This datasets were built from NLIBD dataset (Franzosa et al., 2019) by

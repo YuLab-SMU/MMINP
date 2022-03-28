@@ -20,8 +20,9 @@
 #' @examples
 #' data(MMINP_trained_model)
 #' data(test_metag)
+#' test_metag_preprocessed <- MMINP.preprocess(test_metag, normalized = FALSE)
 #' pred_metab <- MMINP.predict(model = MMINP_trained_model$model,
-#' newdata = test_metag$preprocessed)
+#' newdata = test_metag_preprocessed)
 MMINP.predict <- function(model, newdata, minGeneSize = 0.5) {
   if(!is.numeric(minGeneSize))
     stop("'minGeneSize' must be a numeric")
