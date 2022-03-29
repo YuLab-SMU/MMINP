@@ -49,10 +49,9 @@ MMINP.predict <- function(model, newdata, minGeneSize = 0.5) {
 
   newdata <- newdata[, rownames(model$W.)]
 
-  if(any(abs(colMeans(newdata)) > 1e-5)){
+  if(any(abs(colMeans(newdata)) > 1e-5))
     message("Data is not centered, proceeding...")
-    newdata <- scale(newdata)
-  }
+
   if(!is.numeric(newdata))
     newdata <- as.matrix(newdata)
 

@@ -44,22 +44,6 @@ MMINP is composed of two main functions: `MMINP.train()` and `MMINP.predict()`.
 
 Note that the abundances of both microbial features and metabolites are expected to be preprocessed by `MMINP.preprocess()` before modelling and prediction.
 
-## Installation
-
-Get the released version from CRAN:  
-
-```{r eval = FALSE}
-install.packages("MMINP")
-```
-
-Get the development version from github:
-
-```{r eval = FALSE}
-if (!requireNamespace("remotes", quietly=TRUE))
-    install.packages("remotes")
-remotes::install_github("YuLab-SMU/MMINP")
-```
-
 ## Usage
 ### Trainning
 
