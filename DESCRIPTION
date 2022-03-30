@@ -23,6 +23,7 @@ Imports:
 Suggests: 
     rmarkdown,
     knitr,
+    prettydoc,
     testthat (>= 3.0.0)
 License: GPL (>= 3.0)
 URL: https://github.com/YuLab-SMU/MMINP
