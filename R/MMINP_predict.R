@@ -6,15 +6,15 @@
 #'  them up with 0.
 #' Note that this function does not center or scale the new microbiome matrixs,
 #'  you would better do preprocessing on newdata in advance.
-#' @param model List of class \code{"o2m"}, produced by
-#'  \code{\link[MMINP]{MMINP.train}} and \code{\link[OmicsPLS]{o2m}}.
+#' @param model List of class \code{"mminp"} or \code{"o2m"}, produced by
+#'  \code{\link[MMINP]{MMINP.train}} or \code{\link[OmicsPLS]{o2m}}.
 #' @param newdata New matrix of microbial genes, each column represents a gene.
 #' @param minGeneSize A numeric between 0-1, minimal size of genes in model
 #'  contained in newdata.
 #' @return Predicted Data
 #' @importFrom OmicsPLS o2m
 #' @details
-#' The model must be class 'o2m'.
+#' The model must be class 'mminp' or 'o2m'.
 #' The column of newdata must be microbial genes.
 #' @export
 #' @examples
@@ -23,14 +23,18 @@
 #' test_metag_preprocessed <- MMINP.preprocess(test_metag, normalized = FALSE)
 #' pred_metab <- MMINP.predict(model = MMINP_trained_model$model,
 #' newdata = test_metag_preprocessed)
+#'
 MMINP.predict <- function(model, newdata, minGeneSize = 0.5) {
   if(!is.numeric(minGeneSize))
     stop("'minGeneSize' must be a numeric")
-  if(class(model) != "o2m")
-    stop("The model must be class o2m")
+  if(class(model) != "o2m" && class(model) != "mminp")
+    stop("The model must be class 'o2m' or 'mminp'")
   if(is.null(colnames(newdata)))
     stop("The newdata has no column names")
   checkInputdata(newdata)
+
+  if(class(model) == "mminp")
+    model <- model$model
 
   gene <- intersect(rownames(model$W.), colnames(newdata))
   genesize <- length(gene)/nrow(model$W.)

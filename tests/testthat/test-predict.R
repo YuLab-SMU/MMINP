@@ -5,8 +5,11 @@ test_that("MMINP.predict works", {
   pred_metab <- MMINP.predict(model = MMINP_trained_model$model,
                               newdata = test_metag_preprocessed)
 
+  pred_metab <- MMINP.predict(model = MMINP_trained_model,
+                              newdata = test_metag_preprocessed)
+
   #check class of model
-  testthat::expect_error(MMINP.predict(model = MMINP_trained_model,
+  testthat::expect_error(MMINP.predict(model = test_metag,
                              newdata = test_metag_preprocessed))
 
   #check class of minGeneSize

@@ -7,9 +7,9 @@
 MMINP.train(
   metag,
   metab,
-  n = 1:6,
-  nx = 0:3,
-  ny = 0:3,
+  n = 1:10,
+  nx = 0:5,
+  ny = 0:5,
   seed = 1234,
   compmethod = NULL,
   nr_folds = 3,

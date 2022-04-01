@@ -3,11 +3,11 @@
 \docType{data}
 \name{MMINP_trained_model}
 \alias{MMINP_trained_model}
-\title{(Data) An MMINP (O2-PLS) model}
+\title{(Data) A MMINP model}
 \format{
 A list containing an 'o2m' model, results of correlation analysis
-between metabolites of training data and its predicted values, and iteration
-number of modeling.
+between metabolites of training data and its predicted values, components
+number, re-estimate information and iteration number of modeling.
 }
 \description{
 This model was built using (\code{\link[MMINP]{MMINP.train}}) with

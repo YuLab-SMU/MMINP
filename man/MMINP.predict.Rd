@@ -7,8 +7,8 @@
 MMINP.predict(model, newdata, minGeneSize = 0.5)
 }
 \arguments{
-\item{model}{List of class \code{"o2m"}, produced by
-\code{\link[MMINP]{MMINP.train}} and \code{\link[OmicsPLS]{o2m}}.}
+\item{model}{List of class \code{"mminp"} or \code{"o2m"}, produced by
+\code{\link[MMINP]{MMINP.train}} or \code{\link[OmicsPLS]{o2m}}.}
 
 \item{newdata}{New matrix of microbial genes, each column represents a gene.}
 
@@ -27,7 +27,7 @@ Note that this function does not center or scale the new microbiome matrixs,
 you would better do preprocessing on newdata in advance.
 }
 \details{
-The model must be class 'o2m'.
+The model must be class 'mminp' or 'o2m'.
 The column of newdata must be microbial genes.
 }
 \examples{
@@ -36,4 +36,5 @@ data(test_metag)
 test_metag_preprocessed <- MMINP.preprocess(test_metag, normalized = FALSE)
 pred_metab <- MMINP.predict(model = MMINP_trained_model$model,
 newdata = test_metag_preprocessed)
+
 }

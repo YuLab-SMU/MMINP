@@ -36,7 +36,7 @@
 #'                            metab = train_metab_preprocessed,
 #'                            n = 3:8, nx = 0:5, ny = 0:5, nr_cores = 1)
 #' length(mminp_model$trainres$wellPredicted)
-MMINP.train <- function(metag, metab, n = 1:6, nx = 0:3, ny = 0:3, seed = 1234,
+MMINP.train <- function(metag, metab, n = 1:10, nx = 0:5, ny = 0:5, seed = 1234,
                         compmethod = NULL, nr_folds = 3, nr_cores = 1,
                         rsignif = 0.4, psignif = 0.05, recomponent = FALSE){
   tstart = proc.time()
@@ -146,7 +146,7 @@ MMINP.train <- function(metag, metab, n = 1:6, nx = 0:3, ny = 0:3, seed = 1234,
 #' @importFrom withr with_seed
 #' @export
 get_Components <- function(metag, metab, compmethod = NULL,
-                           n = 1:6, nx = 0:3, ny = 0:3, seed = 1234,
+                           n = 1:10, nx = 0:5, ny = 0:5, seed = 1234,
                            nr_folds = 3, nr_cores = 1){
 
   if(any(rownames(metag) != rownames(metab)))

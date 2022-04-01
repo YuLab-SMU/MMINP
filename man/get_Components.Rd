@@ -8,9 +8,9 @@ get_Components(
   metag,
   metab,
   compmethod = NULL,
-  n = 1:6,
-  nx = 0:3,
-  ny = 0:3,
+  n = 1:10,
+  nx = 0:5,
+  ny = 0:5,
   seed = 1234,
   nr_folds = 3,
   nr_cores = 1
