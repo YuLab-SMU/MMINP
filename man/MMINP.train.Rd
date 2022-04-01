@@ -7,19 +7,20 @@
 MMINP.train(
   metag,
   metab,
-  n = 1:3,
+  n = 1:6,
   nx = 0:3,
   ny = 0:3,
+  seed = 1234,
   compmethod = NULL,
   nr_folds = 3,
   nr_cores = 1,
-  rsignif = 0.3,
+  rsignif = 0.4,
   psignif = 0.05,
   recomponent = FALSE
 )
 }
 \arguments{
-\item{metag}{Training data of microbial features' relative abundances.
+\item{metag}{Training data of sequence features' relative abundances.
 Must have the exact same rows (subjects/samples) as \code{metab}.}
 
 \item{metab}{Training data of metabolite relative abundances.
@@ -29,18 +30,20 @@ Must have the exact same rows (subjects/samples) as \code{metag}.}
 More details in \code{\link[OmicsPLS]{crossval_o2m}} and
 \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.}
 
-\item{nx}{Integer. Number of orthogonal components in \code{metag}.
-Negative values are interpreted as 0.
+\item{nx}{Integer. Number of orthogonal components in \code{metag}. Negative
+values are interpreted as 0.
 More details in \code{\link[OmicsPLS]{crossval_o2m}} and
 \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.}
 
-\item{ny}{Integer. Number of orthogonal components in \code{metab}.
-Negative values are interpreted as 0.
+\item{ny}{Integer. Number of orthogonal components in \code{metab}. Negative
+values are interpreted as 0.
 More details in \code{\link[OmicsPLS]{crossval_o2m}} and
 \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.}
+
+\item{seed}{a random seed to make the analysis reproducible, default is 1234.}
 
 \item{compmethod}{A character string indicating which Cross-validate
-procedure of O2-PLS is to be used for estimating components, must be one of
+procedure of O2PLS is to be used for estimating components, must be one of
 "NULL", "cvo2m" or "cvo2m.adj". If set to "NULL", depends on the features
 number.}
 
@@ -66,7 +69,10 @@ iteration.}
 }
 \value{
 A list containing MMINP model, final correlation results between
-predicted and measured metabolites of training samples, and iteration number.
+predicted and measured metabolites of training samples, components number,
+re-estimate information (i.e. whether re-estimate components or not during
+each iteration) and iteration number. If \code{recomponent = TRUE}, the
+components number is the result of last estimation.
 }
 \description{
 This function contains three steps.

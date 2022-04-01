@@ -8,34 +8,7 @@
 #' than \code{psignif}.);
 #' Step3, (iteration) Re-build O2-PLS model until all reserved metabolites are
 #' well-fitted.
-#' @param metag Training data of microbial features' relative abundances.
-#' Must have the exact same rows (subjects/samples) as \code{metab}.
-#' @param metab Training data of metabolite relative abundances.
-#' Must have the exact same rows (subjects/samples) as \code{metag}.
-#' @param n Integer. Number of joint PLS components. Must be positive.
-#' More details in \code{\link[OmicsPLS]{crossval_o2m}} and
-#'  \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.
-#' @param nx Integer. Number of orthogonal components in \code{metag}.
-#' Negative values are interpreted as 0.
-#' More details in \code{\link[OmicsPLS]{crossval_o2m}} and
-#'  \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.
-#' @param ny Integer. Number of orthogonal components in \code{metab}.
-#' Negative values are interpreted as 0.
-#' More details in \code{\link[OmicsPLS]{crossval_o2m}} and
-#'  \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.
-#' @param compmethod A character string indicating which Cross-validate
-#' procedure of O2-PLS is to be used for estimating components, must be one of
-#' "NULL", "cvo2m" or "cvo2m.adj". If set to "NULL", depends on the features
-#' number.
-#' @param nr_folds Positive integer. Number of folds to consider.
-#' Note: \code{kcv=N} gives leave-one-out CV. Note that CV with less than two
-#'  folds does not make sense.
-#'  More details in \code{\link[OmicsPLS]{crossval_o2m}} and
-#'  \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.
-#' @param nr_cores Positive integer. Number of cores to use for CV. You might
-#'  want to use \code{\link{detectCores}()}. Defaults to 1.
-#'  More details in \code{\link[OmicsPLS]{crossval_o2m}} and
-#'  \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.
+#' @inheritParams get_Components
 #' @param rsignif A numeric ranging from 0 to 1, the minimum correlation
 #' coefficient of features which considered as well-predicted features.
 #' @param psignif A numeric ranging from 0 to 1, the maximum adjusted p value of
@@ -43,8 +16,12 @@
 #' @param recomponent Logical, whether re-estimate components or not during each
 #'  iteration.
 #' @return A list containing MMINP model, final correlation results between
-#' predicted and measured metabolites of training samples, and iteration number.
+#' predicted and measured metabolites of training samples, components number,
+#' re-estimate information (i.e. whether re-estimate components or not during
+#' each iteration) and iteration number. If \code{recomponent = TRUE}, the
+#' components number is the result of last estimation.
 #' @importFrom OmicsPLS crossval_o2m_adjR2 crossval_o2m o2m
+#' @importFrom withr with_seed
 #' @export
 #' @examples
 #' data(train_metab)
@@ -55,9 +32,9 @@
 #'                            metab = train_metab_preprocessed,
 #'                            n = 3:8, nx = 0:5, ny = 0:5, nr_cores = 1)
 #' length(mminp_model$trainres$wellPredicted)
-MMINP.train <- function(metag, metab, n = 1:3, nx = 0:3, ny = 0:3,
+MMINP.train <- function(metag, metab, n = 1:6, nx = 0:3, ny = 0:3, seed = 1234,
                         compmethod = NULL, nr_folds = 3, nr_cores = 1,
-                        rsignif = 0.3, psignif = 0.05, recomponent = FALSE){
+                        rsignif = 0.4, psignif = 0.05, recomponent = FALSE){
   tstart = proc.time()
 
   #check whether the number of same samples between metab and metag is enough
@@ -80,7 +57,7 @@ MMINP.train <- function(metag, metab, n = 1:3, nx = 0:3, ny = 0:3,
 
   #obtain components for O2-PLS method
   components <- get_Components(metag, metab, compmethod = compmethod,
-                               n = n, nx = nx, ny = ny,
+                               n = n, nx = nx, ny = ny, seed = seed,
                                nr_folds = nr_folds, nr_cores = nr_cores)
   #create the first o2m model
   fit0 <- o2m(metag, metab, n = as.numeric(components$n),
@@ -104,7 +81,7 @@ MMINP.train <- function(metag, metab, n = 1:3, nx = 0:3, ny = 0:3,
     #re-estimate components
     if(recomponent){
       components <- get_Components(metag, metab_well, compmethod = compmethod,
-                                   n = n, nx = nx, ny = ny,
+                                   n = n, nx = nx, ny = ny, seed = seed,
                                    nr_folds = nr_folds, nr_cores = nr_cores)
     }
 
@@ -121,7 +98,9 @@ MMINP.train <- function(metag, metab, n = 1:3, nx = 0:3, ny = 0:3,
   tend = proc.time() - tstart
   print(tend)
 
-  return(list(model = fit1, trainres = trainres, trainnumb = trainnumb))
+  return(list(model = fit1, trainres = trainres,
+              components = components, re_estimate = recomponent,
+              trainnumb = trainnumb))
 }
 
 #' @title Estimate components for O2-PLS method
@@ -145,6 +124,7 @@ MMINP.train <- function(metag, metab, n = 1:3, nx = 0:3, ny = 0:3,
 #' values are interpreted as 0.
 #' More details in \code{\link[OmicsPLS]{crossval_o2m}} and
 #'  \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.
+#' @param seed a random seed to make the analysis reproducible, default is 1234.
 #' @param nr_folds Positive integer. Number of folds to consider.
 #' Note: \code{kcv=N} gives leave-one-out CV. Note that CV with less than two
 #'  folds does not make sense.
@@ -156,8 +136,10 @@ MMINP.train <- function(metag, metab, n = 1:3, nx = 0:3, ny = 0:3,
 #'  \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.
 #' @return A data frame of components number
 #' @importFrom OmicsPLS crossval_o2m_adjR2 crossval_o2m
+#' @importFrom withr with_seed
+#' @export
 get_Components <- function(metag, metab, compmethod = NULL,
-                           n = 1:3, nx = 0:3, ny = 0:3,
+                           n = 1:6, nx = 0:3, ny = 0:3, seed = 1234,
                            nr_folds = 3, nr_cores = 1){
 
   if(any(rownames(metag) != rownames(metab)))
@@ -173,14 +155,18 @@ get_Components <- function(metag, metab, compmethod = NULL,
   }
 
   if(compmethod == "cvo2m.adj"){
-    nn <- crossval_o2m_adjR2(X = metag, Y = metab, a = n, ax = nx, ay = ny,
-                             nr_folds = nr_folds, nr_cores = nr_cores)
+    nn <- with_seed(seed, crossval_o2m_adjR2(X = metag, Y = metab,
+                                             a = n, ax = nx, ay = ny,
+                                             nr_folds = nr_folds,
+                                             nr_cores = nr_cores))
     components <- nn[which.min(nn[, 1]), ]
   }
 
   if(compmethod == "cvo2m"){
-    nn <- crossval_o2m(X = metag, Y = metab, a = n, ax = nx, ay = ny,
-                       nr_folds = nr_folds, nr_cores = nr_cores)
+    nn <- with_seed(seed, crossval_o2m(X = metag, Y = metab,
+                                       a = n, ax = nx, ay = ny,
+                                       nr_folds = nr_folds,
+                                       nr_cores = nr_cores))
     components <- get_cvo2mComponent(nn)
   }
 

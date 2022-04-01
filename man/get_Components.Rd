@@ -8,9 +8,10 @@ get_Components(
   metag,
   metab,
   compmethod = NULL,
-  n = 1:3,
+  n = 1:6,
   nx = 0:3,
   ny = 0:3,
+  seed = 1234,
   nr_folds = 3,
   nr_cores = 1
 )
@@ -40,6 +41,8 @@ More details in \code{\link[OmicsPLS]{crossval_o2m}} and
 values are interpreted as 0.
 More details in \code{\link[OmicsPLS]{crossval_o2m}} and
 \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.}
+
+\item{seed}{a random seed to make the analysis reproducible, default is 1234.}
 
 \item{nr_folds}{Positive integer. Number of folds to consider.
 Note: \code{kcv=N} gives leave-one-out CV. Note that CV with less than two
