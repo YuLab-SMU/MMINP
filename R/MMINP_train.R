@@ -15,11 +15,15 @@
 #'  features which considered as well-predicted features.
 #' @param recomponent Logical, whether re-estimate components or not during each
 #'  iteration.
-#' @return A list containing MMINP model, final correlation results between
-#' predicted and measured metabolites of training samples, components number,
-#' re-estimate information (i.e. whether re-estimate components or not during
-#' each iteration) and iteration number. If \code{recomponent = TRUE}, the
-#' components number is the result of last estimation.
+#' @return A list containing
+#'     \item{model}{O2PLS model}
+#'     \item{trainres}{Final correlation results between predicted and measured
+#'     metabolites of training samples}
+#'     \item{components}{Components number. If \code{recomponent = TRUE}, the
+#'     components number is the result of last estimation.}
+#'     \item{re_estimate}{Re-estimate information, i.e. whether re-estimate
+#'     components or not during each iteration}
+#'     \item{trainnumb}{Iteration number}
 #' @importFrom OmicsPLS crossval_o2m_adjR2 crossval_o2m o2m
 #' @importFrom withr with_seed
 #' @export
@@ -62,7 +66,7 @@ MMINP.train <- function(metag, metab, n = 1:6, nx = 0:3, ny = 0:3, seed = 1234,
   #create the first o2m model
   fit0 <- o2m(metag, metab, n = as.numeric(components$n),
               nx = as.numeric(components$nx), ny = as.numeric(components$ny))
-  print("The first model was created successfully...")
+  cat("The first model was created successfully... \n")
 
   #predict the compounds of the training set using the first model
   pred <- MMINP.predict(fit0, metag)
@@ -75,7 +79,7 @@ MMINP.train <- function(metag, metab, n = 1:6, nx = 0:3, ny = 0:3, seed = 1234,
 
   #iteration, create models using well-trained compounds until all compounds are
   #well-trained
-  print("Next, the iteration will last for a long time, please be patient")
+  cat("Next, the iteration will last for a long time, please be patient \n")
   while(length(trainres$wellPredicted) < ncol(pred)){
     metab_well <- metab[, trainres$wellPredicted]
     #re-estimate components
@@ -89,18 +93,21 @@ MMINP.train <- function(metag, metab, n = 1:6, nx = 0:3, ny = 0:3, seed = 1234,
                 nx = as.numeric(components$nx) , ny = as.numeric(components$ny))
     pred <- MMINP.predict(fit1, metag)
     trainnumb <- trainnumb + 1
-    print(trainnumb)
+    #print(trainnumb)
     trainres <- compareFeatures(measured = metab_well, predicted = pred,
                                 rsignif = rsignif, psignif = psignif)
   }
-  print("Congratulations! The trainning process is done.")
+  cat("Congratulations! The trainning process is done. \n")
 
-  tend = proc.time() - tstart
-  print(tend)
+  ttime = proc.time() - tstart
+  cat("Elapsed time: ", round(ttime[3], 2), " \n", sep = "")
 
-  return(list(model = fit1, trainres = trainres,
-              components = components, re_estimate = recomponent,
-              trainnumb = trainnumb))
+  model <- list(model = fit1, trainres = trainres,
+                components = components, re_estimate = recomponent,
+                trainnumb = trainnumb)
+  class(model) <- "mminp"
+
+  return(model)
 }
 
 #' @title Estimate components for O2-PLS method
@@ -179,7 +186,7 @@ get_Components <- function(metag, metab, compmethod = NULL,
 #' \code{\link[OmicsPLS]{crossval_o2m}}.
 #'
 #' @return A data frame of components number
-get_cvo2mComponent <- function(x) {
+get_cvo2mComponent <- function(x){
 
   if(class(x) != "cvo2m")
     stop("x must be the result of 'crossval_o2m', and the class of x is
@@ -199,5 +206,32 @@ get_cvo2mComponent <- function(x) {
   components <- as.data.frame(lapply(components, as.numeric))
 
   return(components)
+}
+
+#' Print function for MMINP.train
+#'
+#' This function is the print method for \code{MMINP.train}.
+#' @param x A model (an object of class "mminp")
+#' @param ... additional parameters
+#' @return NULL
+#' @export
+print.mminp <- function(x, ...){
+  n = x$components$n
+  nx = x$components$nx
+  ny = x$components$ny
+  iteration = x$trainnumb
+  recomponent = x$re_estimate
+  wellfitted = length(x$trainres$wellPredicted)
+  cat("\nMMINP training \n")
+  cat(iteration, " iteration(s) over O2PLS fit \n", sep = "")
+  if(recomponent){
+    cat("Re-estimate components each iteration \n", sep = "")
+    cat("The components of last iteration: ", sep='')
+  }else{
+    cat("with ", n, " joint components  \n", sep='')
+    cat("and  ", nx, " orthogonal components in X \n", sep = "")
+    cat("and  ", ny, " orthogonal components in Y \n", sep = "")
+  }
+  cat(wellfitted, " well-fitted metabolites in this model \n", sep = "")
 }
 

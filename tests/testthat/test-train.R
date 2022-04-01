@@ -7,7 +7,7 @@ test_that("MMINP.train works", {
   model1 <- MMINP.train(metag = train_metag_preprocessed,
                         metab = train_metab_preprocessed,
                         n = 1:3, nx = 0:3, ny = 0:3)
-  testthat::expect_equal(class(model1), 'list')
+  testthat::expect_equal(class(model1), 'mminp')
   testthat::expect_s3_class(model1$model, class = "o2m")
 
   a <- train_metag_preprocessed[1:50, 1:50]

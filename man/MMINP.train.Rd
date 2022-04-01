@@ -68,11 +68,15 @@ features which considered as well-predicted features.}
 iteration.}
 }
 \value{
-A list containing MMINP model, final correlation results between
-predicted and measured metabolites of training samples, components number,
-re-estimate information (i.e. whether re-estimate components or not during
-each iteration) and iteration number. If \code{recomponent = TRUE}, the
-components number is the result of last estimation.
+A list containing
+\item{model}{O2PLS model}
+\item{trainres}{Final correlation results between predicted and measured
+metabolites of training samples}
+\item{components}{Components number. If \code{recomponent = TRUE}, the
+components number is the result of last estimation.}
+\item{re_estimate}{Re-estimate information, i.e. whether re-estimate
+components or not during each iteration}
+\item{trainnumb}{Iteration number}
 }
 \description{
 This function contains three steps.
