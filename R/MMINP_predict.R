@@ -27,13 +27,13 @@
 MMINP.predict <- function(model, newdata, minGeneSize = 0.5) {
   if(!is.numeric(minGeneSize))
     stop("'minGeneSize' must be a numeric")
-  if(class(model) != "o2m" && class(model) != "mminp")
-    stop("The model must be class 'o2m' or 'mminp'")
+  if(!inherits(model, "mminp") && !inherits(model, "o2m"))
+    stop("The model must be class 'mminp' or 'o2m'")
   if(is.null(colnames(newdata)))
     stop("The newdata has no column names")
   checkInputdata(newdata)
 
-  if(class(model) == "mminp")
+  if(inherits(model, "mminp"))
     model <- model$model
 
   gene <- intersect(rownames(model$W.), colnames(newdata))

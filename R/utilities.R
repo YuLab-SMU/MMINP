@@ -53,7 +53,7 @@ compareFeatures <- function(predicted, measured,
   checkInputdata(predicted)
   checkInputdata(measured)
 
-  if(any(rownames(predicted) != rownames(measured))){
+  if(!identical(rownames(predicted), rownames(measured))){
     sid <- intersect(rownames(predicted), rownames(measured))
     if(length(sid) < 3)
       stop("The common samples between 'predicted' and 'measured' are too less.
@@ -64,7 +64,7 @@ compareFeatures <- function(predicted, measured,
     measured <- measured[sid, ]
   }
 
-  if(any(colnames(predicted) != colnames(measured))){
+  if(!identical(colnames(predicted), colnames(measured))){
     mid <- intersect(colnames(predicted), colnames(measured))
     if(length(mid) < 3)
       stop("The common features between 'predicted' and 'measured' are too less.
