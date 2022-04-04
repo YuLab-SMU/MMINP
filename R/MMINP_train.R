@@ -66,7 +66,7 @@ MMINP.train <- function(metag, metab, n = 1:10, nx = 0:5, ny = 0:5, seed = 1234,
   #create the first o2m model
   fit0 <- o2m(metag, metab, n = as.numeric(components$n),
               nx = as.numeric(components$nx), ny = as.numeric(components$ny))
-  cat("The first model was created successfully... \n")
+  message("The first model was created successfully. \n")
 
   #predict the compounds of the training set using the first model
   pred <- MMINP.predict(fit0, metag)
@@ -77,11 +77,42 @@ MMINP.train <- function(metag, metab, n = 1:10, nx = 0:5, ny = 0:5, seed = 1234,
                               rsignif = rsignif, psignif = psignif)
   trainnumb <- 1
 
+  if(length(trainres$wellPredicted) == 0)
+    stop("There was no well-fitted metabolites in the first model, maybe you
+         can try again with smaller 'rsignif' or greater 'psignif'.")
+
+  if(length(trainres$wellPredicted) == ncol(pred))
+    fit1 <- fit0
+
+  if(length(trainres$wellPredicted) < ncol(pred))
+    message("Next, the iteration will last for a long time, please be patient...\n")
+
   #iteration, create models using well-trained compounds until all compounds are
   #well-trained
-  cat("Next, the iteration will last for a long time, please be patient \n")
   while(length(trainres$wellPredicted) < ncol(pred)){
+    if(length(trainres$wellPredicted) < 2)
+      stop("Too strict. There was no or only one well-fitted metabolites in previous model")
+
     metab_well <- metab[, trainres$wellPredicted]
+
+    #check if n + max(nx, ny) > ncol(metab_well)
+    tmp_n <- as.numeric(components$n)
+    tmp_nx <- as.numeric(components$nx)
+    tmp_ny <- as.numeric(components$ny)
+    if((tmp_n + max(tmp_nx, tmp_ny)) > ncol(metab_well)){
+      if(!recomponent){
+        message("the sum of joint and specific component greater than feature number, re-estimate...")
+        recomponent = TRUE
+      }
+      if(tmp_n > ncol(metab_well)){
+        if(!recomponent){
+          message("the joint component greater than feature number, re-estimate...")
+          recomponent = TRUE
+        }
+        n <- seq(n[1], ncol(metab_well))
+      }
+    }
+
     #re-estimate components
     if(recomponent){
       components <- get_Components(metag, metab_well, compmethod = compmethod,
@@ -97,7 +128,8 @@ MMINP.train <- function(metag, metab, n = 1:10, nx = 0:5, ny = 0:5, seed = 1234,
     trainres <- compareFeatures(measured = metab_well, predicted = pred,
                                 rsignif = rsignif, psignif = psignif)
   }
-  cat("Congratulations! The trainning process is done. \n")
+
+  message("Congratulations! The trainning process is done. \n")
 
   ttime = proc.time() - tstart
   cat("Elapsed time: ", round(ttime[3], 2), " \n", sep = "")
@@ -189,8 +221,7 @@ get_Components <- function(metag, metab, compmethod = NULL,
 get_cvo2mComponent <- function(x){
 
   if(class(x) != "cvo2m")
-    stop("x must be the result of 'crossval_o2m', and the class of x is
-         'cvo2m'")
+    stop("x must be the result of 'crossval_o2m', and the class of x is 'cvo2m'")
 
   wmCV = which(min(x$Or, na.rm = T)==x$Or,TRUE,FALSE)
   dnams = dimnames(x$Or)
@@ -226,12 +257,11 @@ print.mminp <- function(x, ...){
   cat(iteration, " iteration(s) over O2PLS fit \n", sep = "")
   if(recomponent){
     cat("Re-estimate components each iteration \n", sep = "")
-    cat("The components of last iteration: ", sep='')
-  }else{
-    cat("with ", n, " joint components  \n", sep='')
-    cat("and  ", nx, " orthogonal components in X \n", sep = "")
-    cat("and  ", ny, " orthogonal components in Y \n", sep = "")
+    cat("The components of last iteration: \n", sep='')
   }
+  cat("with ", n, " joint components  \n", sep='')
+  cat("and  ", nx, " orthogonal components in X \n", sep = "")
+  cat("and  ", ny, " orthogonal components in Y \n", sep = "")
   cat(wellfitted, " well-fitted metabolites in this model \n", sep = "")
 }
 

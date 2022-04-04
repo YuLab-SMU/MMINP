@@ -16,6 +16,7 @@
 #' @param logtransformed Logical, whether do log transformation or not.
 #' @param scaled Logical, whether scale the columns of data or not.
 #' @return A preprocessed numeric matrix for analysis of MMINP.
+#' @importFrom magrittr %>%
 #' @details
 #' The rows of data must be samples and columns of data must be metabolites or
 #' microbial features.
@@ -32,20 +33,28 @@ MMINP.preprocess <- function(data, normalized = TRUE, prev = NA, abund = NA,
                              logtransformed = TRUE, scaled = TRUE){
   checkInputdata(data)
 
+  #delete columns with all 0
+  todel <- apply(data, 2, function(x) all(x == 0)) %>% which()
+  if(length(todel)){
+    data <- data[, -todel]
+    cat(names(todel), " with all 0, deleting...\n")
+  }
+
   if(normalized){
-    data <- apply(data, 2, function(x) x/sum(x))
+    data <- apply(data, 1, function(x) x/sum(x)) %>% t() %>% as.data.frame()
   }
 
   data <- filterFeatures(data, prev = prev, abund = abund)
   if(ncol(data) <2)
-    stop("The filter is too strict, please choose a smaller value for 'prev' or
-         'abund'")
+    stop("The filter is too strict, please choose a smaller value for 'prev' or 'abund'")
 
   if(logtransformed)
     data <- log(data + 1e-6, base = 10)
 
   if(scaled)
     data <- scale(data)
+
+  data <- data[, !apply(data, 2, function(x) all(is.na(x)))]
 
   data
 }

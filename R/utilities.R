@@ -5,14 +5,14 @@
 #' \code{NA}.
 #' @param x A matrix or data frame.
 #' @return NULL
+#' @export
 checkInputdata <- function(x){
 
   if (!is.matrix(x) && !is.data.frame(x))
     stop("'x' must be a matrix or data frame")
 
   if(any(apply(x, 2, function(y) !is.numeric(y))))
-    stop("'x' must be a numeric matrix or a data frame with all numeric-alike
-         variables")
+    stop("'x' must be a numeric matrix or a data frame with all numeric-alike variables")
 
   if(any(is.na(x)))
     stop("'x' contains NA")

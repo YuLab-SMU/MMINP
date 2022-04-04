@@ -39,8 +39,7 @@ MMINP.predict <- function(model, newdata, minGeneSize = 0.5) {
   gene <- intersect(rownames(model$W.), colnames(newdata))
   genesize <- length(gene)/nrow(model$W.)
   if(genesize < minGeneSize){
-    stop("Genes in model contained in newdata are too less, maybe you should
-         change a model.")
+    stop("Genes in model contained in newdata are too less, maybe you should change a model.")
   }else if(genesize < 1){
     message("newdata omits some genes compared with model, add with 0")
     geneadd <- rownames(model$W.)[!rownames(model$W.) %in% gene]
