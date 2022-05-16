@@ -21,6 +21,8 @@ Imports:
     OmicsPLS (>= 2.0.2),
     withr (>= 2.4.2),
     stats
+Remotes:
+    WENLITANG/OmicsPLS
 Suggests: 
     rmarkdown,
     knitr,
