@@ -13,6 +13,7 @@
 #'  contained in newdata.
 #' @return Predicted Data
 #' @importFrom OmicsPLS o2m
+#' @importFrom stats predict
 #' @details
 #' The model must be class 'mminp' or 'o2m'.
 #' The column of newdata must be microbial genes.
@@ -58,8 +59,10 @@ MMINP.predict <- function(model, newdata, minGeneSize = 0.5) {
   if(!is.numeric(newdata))
     newdata <- as.matrix(newdata)
 
-  pred = with(model, (newdata - newdata %*% W_Yosc %*% t(W_Yosc)) %*%
-                W. %*% B_T. %*% t(C.))
+  # pred = with(model, (newdata - newdata %*% W_Yosc %*% t(W_Yosc)) %*%
+  #               W. %*% B_T. %*% t(C.))
+
+  pred <- predict(model, newdata, XorY = c("X"))
 
   return(pred)
 }
