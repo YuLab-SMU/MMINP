@@ -41,3 +41,8 @@ bioccheck:
 clean:
 	cd ..;\
 	$(RM) -r $(PKGNAME).Rcheck/
+
+push:
+	git push origin master
+
+
