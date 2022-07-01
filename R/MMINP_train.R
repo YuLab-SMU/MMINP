@@ -226,7 +226,7 @@ get_Components <- function(metag, metab, compmethod = NULL,
 #' @return A data frame of components number
 get_cvo2mComponent <- function(x){
 
-  if(is(x, "cvo2m"))
+  if(!is(x, "cvo2m"))
     stop("x must be the result of 'crossval_o2m', and the class of x is 'cvo2m'")
 
   wmCV = which(min(x$Or, na.rm = T)==x$Or,TRUE,FALSE)
