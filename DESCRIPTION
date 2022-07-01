@@ -1,6 +1,6 @@
 Package: MMINP
-Title: Microbe-Metabolite INteractions-based metabolic profiles Predictor
-Version: 0.0.0.9000
+Title: Microbe-Metabolite Interactions-Based Metabolic Profiles Predictor
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Wenli",
            family = "Tang",
@@ -12,15 +12,17 @@ Authors@R:
            role  = c("aut", "ths"), 
            comment = c(ORCID = "0000-0002-6485-8781")))
 Description: 
-     MMINP (Microbe-Metabolite INteractions-based metabolic profiles Predictor), 
+     Microbe-Metabolite INteractions-based metabolic profiles Predictor (MMINP), 
      a computational framework to predict microbial community-based metabolic 
-     profiles with O2-PLS model.
+     profiles with O2PLS model.
 Depends: R (>= 4.1.0)
 Imports:
     magrittr (>= 2.0.1),
-    OmicsPLS (>= 2.0.2),
+    OmicsPLS (>= 2.0.5),
     withr (>= 2.4.2),
     stats
+Remotes:
+    selbouhaddani/OmicsPLS
 Suggests: 
     rmarkdown,
     knitr,
