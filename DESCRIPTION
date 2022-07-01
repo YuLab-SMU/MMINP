@@ -18,11 +18,9 @@ Description:
 Depends: R (>= 4.1.0)
 Imports:
     magrittr (>= 2.0.1),
-    OmicsPLS (>= 2.0.3),
-    withr (>= 2.4.2),
+    OmicsPLS (>= 2.0.2),
+    utils,
     stats
-Remotes:
-    selbouhaddani/OmicsPLS
 Suggests: 
     rmarkdown,
     knitr,

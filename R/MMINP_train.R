@@ -25,7 +25,6 @@
 #'     components or not during each iteration}
 #'     \item{trainnumb}{Iteration number}
 #' @importFrom OmicsPLS crossval_o2m_adjR2 crossval_o2m o2m
-#' @importFrom withr with_seed
 #' @export
 #' @examples
 #' data(train_metab)
@@ -175,7 +174,7 @@ MMINP.train <- function(metag, metab, n = 1:10, nx = 0:5, ny = 0:5, seed = 1234,
 #'  \code{\link[OmicsPLS]{crossval_o2m_adjR2}}.
 #' @return A data frame of components number
 #' @importFrom OmicsPLS crossval_o2m_adjR2 crossval_o2m
-#' @importFrom withr with_seed
+#' @importFrom utils packageVersion
 #' @export
 get_Components <- function(metag, metab, compmethod = NULL,
                            n = 1:10, nx = 0:5, ny = 0:5, seed = 1234,
@@ -193,26 +192,42 @@ get_Components <- function(metag, metab, compmethod = NULL,
     stop("compmethod must be 'NULL', 'cvo2m' or 'cvo2m.adj'")
   }
 
-  if(compmethod == "cvo2m.adj"){
-    nn <- #with_seed(seed,
-          crossval_o2m_adjR2(X = metag, Y = metab,
-                             a = n, ax = nx, ay = ny,
-                             nr_folds = nr_folds,
-                             seed = seed,
-                             nr_cores = nr_cores)
-           #         )
-    components <- nn[which.min(nn[, 1]), ]
-  }
+  if(packageVersion('OmicsPLS') >= '2.0.5'){
+    if(compmethod == "cvo2m.adj"){
+      nn <- crossval_o2m_adjR2(X = metag, Y = metab,
+                               a = n, ax = nx, ay = ny,
+                               nr_folds = nr_folds,
+                               seed = seed,
+                               nr_cores = nr_cores)
+      components <- nn[which.min(nn[, 1]), ]
+    }
 
-  if(compmethod == "cvo2m"){
-    nn <- #with_seed(seed,
-          crossval_o2m(X = metag, Y = metab,
-                       a = n, ax = nx, ay = ny,
-                       nr_folds = nr_folds,
-                       seed = seed,
-                       nr_cores = nr_cores)
-           #         )
-    components <- get_cvo2mComponent(nn)
+    if(compmethod == "cvo2m"){
+      nn <- crossval_o2m(X = metag, Y = metab,
+                         a = n, ax = nx, ay = ny,
+                         nr_folds = nr_folds,
+                         seed = seed,
+                         nr_cores = nr_cores)
+      components <- get_cvo2mComponent(nn)
+    }
+  }else{
+    if(compmethod == "cvo2m.adj"){
+      nn <- crossval_o2m_adjR2(X = metag, Y = metab,
+                               a = n, ax = nx, ay = ny,
+                               nr_folds = nr_folds,
+                               #seed = seed,
+                               nr_cores = nr_cores)
+      components <- nn[which.min(nn[, 1]), ]
+    }
+
+    if(compmethod == "cvo2m"){
+      nn <- crossval_o2m(X = metag, Y = metab,
+                         a = n, ax = nx, ay = ny,
+                         nr_folds = nr_folds,
+                         #seed = seed,
+                         nr_cores = nr_cores)
+      components <- get_cvo2mComponent(nn)
+    }
   }
 
   return(components)
