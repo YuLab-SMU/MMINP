@@ -194,20 +194,20 @@ get_Components <- function(metag, metab, compmethod = NULL,
 
   if(packageVersion('OmicsPLS') >= '2.0.5'){
     if(compmethod == "cvo2m.adj"){
-      nn <- crossval_o2m_adjR2(X = metag, Y = metab,
+      nn <- do.call("crossval_o2m_adjR2", list(X = metag, Y = metab,
                                a = n, ax = nx, ay = ny,
                                nr_folds = nr_folds,
                                seed = seed,
-                               nr_cores = nr_cores)
+                               nr_cores = nr_cores))
       components <- nn[which.min(nn[, 1]), ]
     }
 
     if(compmethod == "cvo2m"){
-      nn <- crossval_o2m(X = metag, Y = metab,
+      nn <- do.call("crossval_o2m", list(X = metag, Y = metab,
                          a = n, ax = nx, ay = ny,
                          nr_folds = nr_folds,
                          seed = seed,
-                         nr_cores = nr_cores)
+                         nr_cores = nr_cores))
       components <- get_cvo2mComponent(nn)
     }
   }else{
