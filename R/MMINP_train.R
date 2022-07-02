@@ -27,15 +27,16 @@
 #' @importFrom OmicsPLS crossval_o2m_adjR2 crossval_o2m o2m
 #' @export
 #' @examples
-#' data(train_metab)
-#' data(train_metag)
-#' train_metag_preprocessed <- MMINP.preprocess(train_metag, normalized = FALSE)
-#' train_metab_preprocessed <- MMINP.preprocess(train_metab, normalized = FALSE)
-#' mminp_model <- MMINP.train(metag = train_metag_preprocessed,
-#'                            metab = train_metab_preprocessed,
-#'                            n = 3:8, nx = 0:5, ny = 0:5, nr_cores = 1)
+#' data(test_metab)
+#' data(test_metag)
+#' a <- MMINP.preprocess(test_metag[, 1:20], normalized = FALSE)
+#' b <- MMINP.preprocess(test_metab[, 1:20], normalized = FALSE)
+#' mminp_model <- MMINP.train(metag = a,
+#'                            metab = b,
+#'                            n = 3:5, nx = 0:3, ny = 0:3,
+#'                            nr_folds = 2, nr_cores = 1)
 #' length(mminp_model$trainres$wellPredicted)
-MMINP.train <- function(metag, metab, n = 1:10, nx = 0:5, ny = 0:5, seed = 1234,
+MMINP.train <- function(metag, metab, n = 1:3, nx = 0:3, ny = 0:3, seed = 1234,
                         compmethod = NULL, nr_folds = 3, nr_cores = 1,
                         rsignif = 0.4, psignif = 0.05, recomponent = FALSE){
   tstart = proc.time()

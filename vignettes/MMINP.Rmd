@@ -47,7 +47,7 @@ Note that the abundances of both microbial features and metabolites are expected
 ## Usage
 ### Trainning
 
-```{r warning=FALSE, message=FALSE}
+```{r warning=FALSE, message=FALSE, eval=FALSE}
 library(MMINP)
 data(train_metag)
 data(train_metab)
@@ -61,7 +61,7 @@ model1 <- MMINP.train(metag = train_metag_preprocessed,
 
 ### Prediction
 
-```{r warning=FALSE, message=FALSE}
+```{r warning=FALSE, message=FALSE, eval=FALSE}
 library(MMINP)
 data(MMINP_trained_model)
 data(test_metag)
