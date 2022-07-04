@@ -12,7 +12,11 @@ Authors@R:
            role  = c("aut", "ths"), 
            comment = c(ORCID = "0000-0002-6485-8781")))
 Description: 
-     Implements a computational framework to predict microbial community-based metabolic profiles with 'O2PLS' model.
+     Implements a computational framework to predict microbial community-based 
+     metabolic profiles with 'O2PLS' model. It provides procedures of model 
+     training and prediction. Paired microbiome and metabolome data are needed 
+     for modeling, and the trained model can be applied to predict metabolites 
+     of analogous environments using new microbial feature abundances.
 Depends: R (>= 4.1.0)
 Imports:
     magrittr (>= 2.0.1),

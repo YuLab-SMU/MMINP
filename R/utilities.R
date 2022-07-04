@@ -4,7 +4,7 @@
 #' frame with all numeric-alike variables, or if any elements of \code{x} is
 #' \code{NA}.
 #' @param x A matrix or data frame.
-#' @return NULL
+#' @return No return value
 #' @export
 checkInputdata <- function(x){
 

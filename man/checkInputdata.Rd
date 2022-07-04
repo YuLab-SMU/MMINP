@@ -9,6 +9,9 @@ checkInputdata(x)
 \arguments{
 \item{x}{A matrix or data frame.}
 }
+\value{
+No return value
+}
 \description{
 This function throws an error if \code{x} is not a numeric matrix or a data
 frame with all numeric-alike variables, or if any elements of \code{x} is

@@ -51,5 +51,4 @@ data(train_metag)
 d <- MMINP.preprocess(train_metag)
 d <- MMINP.preprocess(train_metag, prev = 0.3, abund = 0.001)
 d[1:5, 1:5]
-
 }

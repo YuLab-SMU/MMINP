@@ -14,7 +14,6 @@
 #' d <- filterFeatures(train_metag, prev = 0.8)
 #' dim(train_metag)
 #' dim(d)
-#'
 filterFeatures <- function(x, prev = NA, abund = NA){
 
   checkInputdata(x)

@@ -27,5 +27,4 @@ data(train_metag)
 d <- filterFeatures(train_metag, prev = 0.8)
 dim(train_metag)
 dim(d)
-
 }

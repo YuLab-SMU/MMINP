@@ -11,6 +11,9 @@
 
 \item{...}{additional parameters}
 }
+\value{
+Brief information about the object.
+}
 \description{
 This function is the print method for \code{MMINP.train}.
 }

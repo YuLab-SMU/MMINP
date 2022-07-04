@@ -266,7 +266,7 @@ get_cvo2mComponent <- function(x){
 #' This function is the print method for \code{MMINP.train}.
 #' @param x A model (an object of class "mminp")
 #' @param ... additional parameters
-#' @return NULL
+#' @return Brief information about the object.
 #' @export
 print.mminp <- function(x, ...){
   n = x$components$n

@@ -29,8 +29,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-MMINP is a computational framework to predict microbial community-based 
-metabolic profiles using microbial genes. The main core is O2-PLS algorithm, which aimed to split structured noise caused by each omics data and discover interactions of the real joint parts between two omics.  
+MMINP is a computational framework to predict microbial community-based metabolic profiles using microbial genes. The main core is O2-PLS algorithm, which aimed to split structured noise caused by each omics data and discover interactions of the real joint parts between two omics.  
 
 ```{r, echo=FALSE, fig.width = 12, dpi=400, fig.align="center", fig.cap= "The Overview of the design of MMINP package"}
 knitr::include_graphics("./mminp.png")
