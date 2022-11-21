@@ -9,7 +9,7 @@ MMINP.preprocess(
   normalized = TRUE,
   prev = NA,
   abund = NA,
-  logtransformed = TRUE,
+  transformed = "none",
   scaled = TRUE
 )
 }
@@ -26,7 +26,7 @@ to be retained. If set to NA, means no need to filter prevalence.}
 \item{abund}{A numeric greater than 0, the minimum abundance (mean) of
 features to be retained. If set to NA, means no need to filter abundance.}
 
-\item{logtransformed}{Logical, whether do log transformation or not.}
+\item{transformed}{character, select a transformation method: "boxcox", "log", or "none".}
 
 \item{scaled}{Logical, whether scale the columns of data or not.}
 }
@@ -43,7 +43,7 @@ To meet the need of O2-PLS method, data must be scaled.
 \details{
 The rows of data must be samples and columns of data must be metabolites or
 microbial features.
-The filtering process (\code{prev} and \code{abund}) is before log
+The filtering process (\code{prev} and \code{abund}) is before log/boxcox
 transformation and scale transformation.
 }
 \examples{

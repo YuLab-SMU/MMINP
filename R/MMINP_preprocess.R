@@ -13,14 +13,14 @@
 #'  to be retained. If set to NA, means no need to filter prevalence.
 #' @param abund A numeric greater than 0, the minimum abundance (mean) of
 #' features to be retained. If set to NA, means no need to filter abundance.
-#' @param logtransformed Logical, whether do log transformation or not.
+#' @param transformed character, select a transformation method: "boxcox", "log", or "none".
 #' @param scaled Logical, whether scale the columns of data or not.
 #' @return A preprocessed numeric matrix for analysis of MMINP.
 #' @importFrom magrittr %>%
 #' @details
 #' The rows of data must be samples and columns of data must be metabolites or
 #' microbial features.
-#' The filtering process (\code{prev} and \code{abund}) is before log
+#' The filtering process (\code{prev} and \code{abund}) is before log/boxcox
 #' transformation and scale transformation.
 #' @export
 #' @examples
@@ -29,7 +29,7 @@
 #' d <- MMINP.preprocess(train_metag, prev = 0.3, abund = 0.001)
 #' d[1:5, 1:5]
 MMINP.preprocess <- function(data, normalized = TRUE, prev = NA, abund = NA,
-                             logtransformed = TRUE, scaled = TRUE){
+                             transformed = "none", scaled = TRUE){
   checkInputdata(data)
 
   #delete columns with all 0
@@ -47,13 +47,40 @@ MMINP.preprocess <- function(data, normalized = TRUE, prev = NA, abund = NA,
   if(ncol(data) <2)
     stop("The filter is too strict, please choose a smaller value for 'prev' or 'abund'")
 
-  if(logtransformed)
-    data <- log(data + 1e-6, base = 10)
+  data <- switch(transformed,
+                 log = apply(data, 2, logSmoothZero, base = 10),
+                 boxcox = apply(data, 2, boxcoxSmoothZero),
+                 none = data
+  )
 
   if(scaled)
-    data <- scale(data)
+    data <- scale(data, center = TRUE, scale = TRUE)
 
   data <- data[, !apply(data, 2, function(x) all(is.na(x)))]
 
   data
 }
+
+logSmoothZero <- function(x, base = 10){
+  if(!is.numeric(x))
+    stop("x must be numeric")
+  if(any(x < 0))
+    stop("x can not contain negetive values")
+
+  if(any(x == 0))
+    x <- x + min(x[x > 0]) * 0.5
+
+  res <- log(x, base = base)
+
+  return(res)
+}
+
+#' @importFrom forecast BoxCox.lambda BoxCox
+boxcoxSmoothZero <- function(x){
+  if(any(x == 0))
+    x <- x + min(x[x > 0]) * 0.5
+  lambda <- BoxCox.lambda(x)
+  res <- BoxCox(x, lambda)
+  return(res)
+}
+

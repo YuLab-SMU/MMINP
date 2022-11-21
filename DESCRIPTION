@@ -1,6 +1,6 @@
 Package: MMINP
 Title: Microbe-Metabolite Interactions-Based Metabolic Profiles Predictor
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     c(person(given = "Wenli",
            family = "Tang",
@@ -22,7 +22,8 @@ Imports:
     magrittr (>= 2.0.1),
     OmicsPLS (>= 2.0.2),
     utils,
-    stats
+    stats,
+    forecast
 Suggests: 
     rmarkdown,
     knitr,
@@ -34,6 +35,6 @@ BugReports: https://github.com/YuLab-SMU/MMINP/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Config/testthat/edition: 3
 VignetteBuilder: knitr

@@ -50,8 +50,8 @@ compareFeatures <- function(predicted, measured,
     stop("rsignif must be 0~1.")
   if(psignif > 1 | psignif < 0)
     stop("psignif must be 0~1.")
-  checkInputdata(predicted)
-  checkInputdata(measured)
+  # checkInputdata(predicted)
+  # checkInputdata(measured)
 
   if(!identical(rownames(predicted), rownames(measured))){
     sid <- intersect(rownames(predicted), rownames(measured))
