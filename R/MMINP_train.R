@@ -19,6 +19,7 @@
 #'     \item{model}{O2PLS model}
 #'     \item{trainres}{Final correlation results between predicted and measured
 #'     metabolites of training samples}
+#'     \item{WFM}{Well-fitted metabolites}
 #'     \item{components}{Components number. If \code{recomponent = TRUE}, the
 #'     components number is the result of last estimation.}
 #'     \item{re_estimate}{Re-estimate information, i.e. whether re-estimate
@@ -134,7 +135,8 @@ MMINP.train <- function(metag, metab, n = 1:3, nx = 0:3, ny = 0:3, seed = 1234,
   ttime = proc.time() - tstart
   cat("Elapsed time: ", round(ttime[3], 2), " \n", sep = "")
 
-  model <- list(model = fit1, trainres = trainres,
+  model <- list(model = fit1, trainres = trainres$trainres,
+                WFM = trainres$wellPredicted,
                 components = components, re_estimate = recomponent,
                 trainnumb = trainnumb)
   class(model) <- "mminp"
@@ -274,16 +276,26 @@ print.mminp <- function(x, ...){
   ny = x$components$ny
   iteration = x$trainnumb
   recomponent = x$re_estimate
-  wellfitted = length(x$trainres$wellPredicted)
+  wellfitted = length(x$WFM)
+  variations = data.frame(R2X = x$model$R2X,
+                          R2Y = x$model$R2Y,
+                          R2Xcorr = x$model$R2Xcorr,
+                          R2Ycorr = x$model$R2Ycorr,
+                          R2Xhat = x$model$R2Xhat,
+                          R2Yhat = x$model$R2Yhat)
+  variations[, "R2Xhat/R2Xcorr"] = variations$R2Xhat / variations$R2Xcorr
+  variations[, "R2Yhat/R2Ycorr"] = variations$R2Yhat / variations$R2Ycorr
+
   cat("\nMMINP training \n")
   cat(iteration, " iteration(s) over O2PLS fit \n", sep = "")
   if(recomponent){
     cat("Re-estimate components each iteration \n", sep = "")
-    cat("The components of last iteration: \n", sep='')
+    cat("The components of last iteration: \n", sep="")
   }
-  cat("with ", n, " joint components  \n", sep='')
+  cat("with ", n, " joint components  \n", sep="")
   cat("and  ", nx, " orthogonal components in X \n", sep = "")
   cat("and  ", ny, " orthogonal components in Y \n", sep = "")
   cat(wellfitted, " well-fitted metabolites in this model \n", sep = "")
+  cat("Variations in the model: \n", variations, "\n", sep = "")
 }
 

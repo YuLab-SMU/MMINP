@@ -72,6 +72,7 @@ A list containing
 \item{model}{O2PLS model}
 \item{trainres}{Final correlation results between predicted and measured
 metabolites of training samples}
+\item{WFM}{Well-fitted metabolites}
 \item{components}{Components number. If \code{recomponent = TRUE}, the
 components number is the result of last estimation.}
 \item{re_estimate}{Re-estimate information, i.e. whether re-estimate
