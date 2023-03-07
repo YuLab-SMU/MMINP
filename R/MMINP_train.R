@@ -296,7 +296,7 @@ print.mminp <- function(x, ...){
   cat("and  ", nx, " orthogonal components in X \n", sep = "")
   cat("and  ", ny, " orthogonal components in Y \n", sep = "")
   cat(wellfitted, " well-fitted metabolites in this model \n", sep = "")
-  cat("Variations in the model: \n", sep = "")
+  cat("\nVariations in the model: \n", sep = "")
   print(variations)
 }
 
