@@ -10,13 +10,13 @@ environments using new microbial feature abundances.
 
 ## Installation
 
-Get the released version from CRAN:
+Get the released version from CRAN (<https://cran.r-project.org/package=MMINP>):
 
 ```r
 install.packages("MMINP")
 ```
 
-Or the development version from github:
+Or the development version from GitHub (<https://github.com/YuLab-SMU/MMINP>):
 
 ```r
 ## install.packages("remotes")
@@ -40,8 +40,10 @@ pb <- train_metab[predS, ]
 pg <- train_metag[predS, ]
 
 ## data preprocessing
-a <- MMINP.preprocess(tg, normalized = FALSE, prev = 0.1, abund = 0.00001, transformed = 'boxcox', scaled = T)
-b <- MMINP.preprocess(tb, normalized = FALSE, prev = 0.1, abund = 0.00001, transformed = 'boxcox', scaled = T)
+a <- MMINP.preprocess(tg, normalized = FALSE, prev = 0.1, 
+                    abund = 0.00001, transformed = 'boxcox', scaled = T)
+b <- MMINP.preprocess(tb, normalized = FALSE, prev = 0.1, 
+                    abund = 0.00001, transformed = 'boxcox', scaled = T)
 
 ## training model
 mminpmodel <- MMINP.train(metag = a,
